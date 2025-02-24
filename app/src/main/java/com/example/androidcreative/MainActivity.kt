@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,33 +40,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AndroidCreativeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            ProfileCardScreen()
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AndroidCreativeTheme {
-        Greeting("Android")
-    }
-}
 
 @Preview
 @Composable
@@ -128,7 +108,7 @@ fun ProfileCardComponent() {
 
 @Preview
 @Composable
-fun ProfileCardButton (
+fun ProfileCardButton ( //버튼 기능을 위한 컴포저블
     modifier: Modifier=Modifier
 ) {
     var isClicked by remember { mutableStateOf(false) }
@@ -141,4 +121,18 @@ fun ProfileCardButton (
             .size(15.dp)
             .clickable { isClicked=!isClicked }
     )
+}
+
+@Preview
+@Composable
+fun ProfileCardScreen() {
+    LazyColumn (
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
+        //contentPadding = PaddingValues()
+    ) {
+        items(7) {
+            ProfileCardComponent()
+        }
+    }
 }
