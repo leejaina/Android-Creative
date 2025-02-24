@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -110,7 +111,7 @@ fun ProfileCardComponent() {
 fun ProfileCardButton ( //버튼 기능을 위한 컴포저블
     modifier: Modifier=Modifier
 ) {
-    var isClicked by remember { mutableStateOf(false) }
+    var isClicked by rememberSaveable { mutableStateOf(false) }
 
     Image(
         painter = painterResource(id=if (isClicked) R.drawable.blackbotton
