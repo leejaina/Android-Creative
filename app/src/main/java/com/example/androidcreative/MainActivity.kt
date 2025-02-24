@@ -47,11 +47,10 @@ class MainActivity : ComponentActivity() {
 
 
 @Preview
-@Composable
+@Composable //하나의 학생증을 만드는 컴포저블
 fun ProfileCardComponent() {
     Box( //학생증 틀
         modifier = Modifier
-            .padding(horizontal = 13.dp, vertical = 11.dp)
             .height(80.dp)
             .width(160.dp)
             .clip(RoundedCornerShape(10.dp))
@@ -124,12 +123,12 @@ fun ProfileCardButton ( //버튼 기능을 위한 컴포저블
 }
 
 @Preview
-@Composable
+@Composable //전체 화면 구성. mainactivity와 이어진다.
 fun ProfileCardScreen() {
     LazyColumn (
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(15.dp),
-        //contentPadding = PaddingValues()
+        contentPadding = PaddingValues(top=11.dp, start = 13.dp)
     ) {
         items(7) {
             ProfileCardComponent()
