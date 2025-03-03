@@ -1,0 +1,4 @@
+package adddelete
+
+class AddDeleteScreen {
+}
