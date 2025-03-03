@@ -46,7 +46,7 @@ fun RemoveButton(onClick: () -> Unit={}) { //지피띠가 이렇게 하래용(�
     ) {
         Text("삭제", color = Color.Black)
     }
-<<<<<<< HEAD
+
 }
 
 @Preview
