@@ -52,7 +52,7 @@ fun NumberCircle(number: Int = 1) { //와 미친~ 프리뷰쓰려면 변수의 �
 
 @Preview
 @Composable //삭제 버튼 컴포저블
-fun RemoveButton(onClick: () -> Unit = {}) { //지피띠가 이렇게 하래용(잘 이해못함
+fun RemoveButton(onClick: () -> Unit = {}) { //지피띠가 이렇게 하래용
     Button(
         onClick = onClick,
         modifier = Modifier
@@ -85,6 +85,7 @@ fun AddButton(onClick: () -> Unit = {}) {
 @Composable
 fun AddDeleteScreen() {
     var numbers by remember { mutableStateOf(listOf(1)) } //numbers=[1] 이라는 리스트 만들어져
+    //val 로 어떻게 써야할지 모르겠어요 ㅠㅠ
 
     Column(
         modifier = Modifier
@@ -94,7 +95,7 @@ fun AddDeleteScreen() {
     ) {
         LazyColumn(
             modifier = Modifier
-                .weight(1f)
+                .weight(1f) //컴포넌트가 부모 Column이나 Row같은데서 비율 어케차지할지
                 .fillMaxWidth()
                 .padding(start = 30.dp, top = 30.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp)
