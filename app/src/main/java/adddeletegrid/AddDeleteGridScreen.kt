@@ -1,73 +1,88 @@
 package adddeletegrid
 
+import adddelete.AddButton
 import adddelete.AddDeleteScreen
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.NavHost
-import androidx.compose.runtime.remember
+import adddelete.NumberCircle
+import adddelete.RemoveButton
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import adddelete.NumberCircle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.tooling.preview.Preview
 
 @Preview
-@Composable //이동 버튼 컴포저블
+@Composable
 fun MoveButton(onClick: () -> Unit = {}) {
     Button(
         onClick = onClick,
-        modifier = Modifier
-            .size(width = 100.dp, height = 40.dp),
-        colors = ButtonDefaults.buttonColors(
-            contentColor = Color(0xFFFFA938)
-        )
+        modifier = Modifier.size(width = 100.dp, height = 40.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA938))
     ) {
         Text("이동", color = Color.Black)
     }
 }
 
 @Composable
-fun NewAddDeleteScreen(onMoveClick: () -> Unit) {
+fun NewVerAddDeleteScreen(onMoveClick: (List<Int>) -> Unit, numbers: List<Int>) {
+    var numbersState by rememberSaveable { mutableStateOf(numbers.take(6)) }
+
     Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxSize().padding(bottom = 81.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AddDeleteScreen()
-        Spacer(modifier = Modifier.height(22.dp))
-        MoveButton(onClick = onMoveClick) // ✅ 이동 버튼 추가
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(start = 30.dp, top = 30.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            items(numbersState) { number ->
+                NumberCircle(number = number)
+            }
+        }
+
+        MoveButton { onMoveClick(numbersState) } // 이동 버튼을 위쪽에 배치
+
+        Spacer(modifier = Modifier.height(22.dp)) // 버튼 사이 공간 조정
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 60.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            RemoveButton {
+                if (numbersState.size > 1) {
+                    numbersState = numbersState.dropLast(1)
+                }
+            }
+
+            AddButton {
+                if (numbersState.size < 6) {
+                    numbersState = numbersState + (numbersState.size + 1)
+                }
+            }
+        }
     }
 }
 
-
 @Composable
-fun AddDeleteGridScreen(onMoveClick: () -> Unit) {
-    var numbers by remember { mutableStateOf((1..3).toList()) }
+fun AddDeleteGridScreen(onMoveClick: (List<Int>) -> Unit, numbers: List<Int>) {
+    var numbersState by rememberSaveable { mutableStateOf(numbers) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 81.dp),
+        modifier = Modifier.fillMaxSize().padding(bottom = 81.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyVerticalGrid(
@@ -75,14 +90,18 @@ fun AddDeleteGridScreen(onMoveClick: () -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+                .padding(start = 30.dp, top = 30.dp),
+            verticalArrangement = Arrangement.spacedBy(30.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(numbers) { number ->
+            items(numbersState) { number ->
                 NumberCircle(number = number)
             }
         }
+
+        MoveButton { onMoveClick(numbersState) } // 이동 버튼
+
+        Spacer(modifier = Modifier.height(22.dp))
 
         Row(
             modifier = Modifier
@@ -90,12 +109,9 @@ fun AddDeleteGridScreen(onMoveClick: () -> Unit) {
                 .padding(horizontal = 40.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            MoveButton(onClick = onMoveClick)
-            Spacer(modifier = Modifier.height(22.dp))
-
             Button(
                 onClick = {
-                    if (numbers.size > 1) numbers = numbers.dropLast(1)
+                    if (numbersState.size > 1) numbersState = numbersState.dropLast(1)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEADDFF))
             ) {
@@ -104,7 +120,7 @@ fun AddDeleteGridScreen(onMoveClick: () -> Unit) {
 
             Button(
                 onClick = {
-                    if (numbers.size < 15) numbers = numbers + (numbers.size + 1)
+                    if (numbersState.size < 15) numbersState = numbersState + (numbersState.size + 1)
                 },
                 colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF66558F))
             ) {
@@ -114,15 +130,48 @@ fun AddDeleteGridScreen(onMoveClick: () -> Unit) {
     }
 }
 
+@Composable
+fun AddDeleteGridNavGraph() {
+    val navController = rememberNavController()
+    var numbers by rememberSaveable { mutableStateOf(listOf(1)) }
+
+    NavHost(navController = navController, startDestination = "new_add_delete") {
+        composable("new_add_delete") {
+            NewVerAddDeleteScreen(
+                onMoveClick = { updatedNumbers ->
+                    numbers = updatedNumbers // 상태 저장
+                    navController.navigate("add_delete_grid")
+                },
+                numbers = numbers
+            )
+        }
+        composable("add_delete_grid") {
+            AddDeleteGridScreen(
+                onMoveClick = { updatedNumbers ->
+                    numbers = updatedNumbers.take(6) // 6개 초과 시 제한
+                    navController.popBackStack()
+                },
+                numbers = numbers
+            )
+        }
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun AddDeleteGridScreenPreview() {
-    AddDeleteGridScreen(onMoveClick = {})
+    AddDeleteGridScreen(
+        onMoveClick = {},
+        numbers = listOf(1, 2, 3)
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun NewAddDeleteScreenPreview() {
-    NewAddDeleteScreen(onMoveClick = {})
+fun NewVerAddDeleteScreenPreview() {
+    NewVerAddDeleteScreen(
+        onMoveClick = {},
+        numbers = listOf(1, 2, 3)
+    )
 }
-
