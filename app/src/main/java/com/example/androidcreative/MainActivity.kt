@@ -1,6 +1,11 @@
 package com.example.androidcreative
 
 import adddelete.AddDeleteScreen
+import adddeletegrid.AddDeleteGridNavGraph
+import adddeletegrid.AddDeleteGridScreen
+import adddeletegrid.AddDeleteGridScreenPreview
+import adddeletegrid.NewAddDeleteScreen
+import adddeletegrid.NewAddDeleteScreenPreview
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -37,12 +42,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidcreative.ui.theme.AndroidCreativeTheme
 import profilecard.ProfileCardScreen
+import androidx.navigation.NavHostController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AddDeleteScreen()
+            AndroidCreativeTheme {
+                AddDeleteGridNavGraph()
+            }
         }
     }
 }
+

@@ -81,8 +81,8 @@ fun AddButton(onClick: () -> Unit = {}) {
     }
 }
 
-@Preview
-@Composable
+
+@Composable //걍 전체 화면 컴포저블
 fun AddDeleteScreen() {
     var numbers by remember { mutableStateOf(listOf(1)) } //numbers=[1] 이라는 리스트 만들어져
     //val 로 어떻게 써야할지 모르겠어요 ㅠㅠ
@@ -108,7 +108,7 @@ fun AddDeleteScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 60.dp, end=60.dp),
+                .padding(start = 60.dp, end = 60.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             RemoveButton {
@@ -126,4 +126,10 @@ fun AddDeleteScreen() {
             }
         }
     }
+}
+
+@Preview (showBackground = true,  )
+@Composable
+private fun AddDeleteScreenPreview () {
+    AddDeleteScreen()
 }
