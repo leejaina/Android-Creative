@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 
 @Preview
@@ -84,9 +85,7 @@ fun AddButton(onClick: () -> Unit = {}) {
 
 @Composable //걍 전체 화면 컴포저블
 fun AddDeleteScreen() {
-    var numbers by remember { mutableStateOf(listOf(1)) } //numbers=[1] 이라는 리스트 만들어져
-    //val 로 어떻게 써야할지 모르겠어요 ㅠㅠ
-
+    val numbers = remember { mutableStateListOf(1) } //numbers=[1] 이라는 리스트 만들어져
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -113,7 +112,7 @@ fun AddDeleteScreen() {
         ) {
             RemoveButton {
                 if (numbers.size > 1) {
-                    numbers = numbers.dropLast(1)
+                    numbers.removeAt(numbers.lastIndex)
                 }
             }
 
@@ -121,7 +120,7 @@ fun AddDeleteScreen() {
 
             AddButton {
                 if (numbers.size < 6) {
-                    numbers = numbers + (numbers.size + 1)
+                    numbers.add(numbers.size+1)
                 }
             }
         }

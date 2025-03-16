@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.FlowRow
 
 @Preview
 @Composable
@@ -32,7 +33,7 @@ fun MoveButton(onClick: () -> Unit = {}) {
     }
 }
 
-@Composable
+@Composable //기본 화면. 저번에 만든 것 그대로 끌고 와서 '이동'버튼만 추가하려고 했으나...
 fun NewVerAddDeleteScreen(onMoveClick: (List<Int>) -> Unit, numbers: List<Int>) {
     var numbersState by rememberSaveable { mutableStateOf(numbers.take(6)) }
 
@@ -52,9 +53,9 @@ fun NewVerAddDeleteScreen(onMoveClick: (List<Int>) -> Unit, numbers: List<Int>) 
             }
         }
 
-        MoveButton { onMoveClick(numbersState) } // 이동 버튼을 위쪽에 배치
+        MoveButton { onMoveClick(numbersState) } // 이동 버튼을 위에다가
 
-        Spacer(modifier = Modifier.height(22.dp)) // 버튼 사이 공간 조정
+        Spacer(modifier = Modifier.height(22.dp))
 
         Row(
             modifier = Modifier
@@ -77,27 +78,32 @@ fun NewVerAddDeleteScreen(onMoveClick: (List<Int>) -> Unit, numbers: List<Int>) 
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddDeleteGridScreen(onMoveClick: (List<Int>) -> Unit, numbers: List<Int>) {
     var numbersState by rememberSaveable { mutableStateOf(numbers) }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(bottom = 81.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 81.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+        FlowRow ( // FlowRow 사용하여 요소 정렬
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
                 .padding(start = 30.dp, top = 30.dp),
-            verticalArrangement = Arrangement.spacedBy(30.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            maxItemsInEachRow = 3, // 한 줄에 3개씩 배치 ㄱㄱ
+            horizontalArrangement = Arrangement.Center,
+            //horizontalArrangement = Arrangement.spacedBy(30.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            items(numbersState) { number ->
+            numbersState.forEach { number ->
                 NumberCircle(number = number)
             }
         }
+
 
         MoveButton { onMoveClick(numbersState) } // 이동 버튼
 
@@ -139,7 +145,7 @@ fun AddDeleteGridNavGraph() {
         composable("new_add_delete") {
             NewVerAddDeleteScreen(
                 onMoveClick = { updatedNumbers ->
-                    numbers = updatedNumbers // 상태 저장
+                    numbers = updatedNumbers // 상태 저장 ㄱㄱ
                     navController.navigate("add_delete_grid")
                 },
                 numbers = numbers
@@ -148,7 +154,7 @@ fun AddDeleteGridNavGraph() {
         composable("add_delete_grid") {
             AddDeleteGridScreen(
                 onMoveClick = { updatedNumbers ->
-                    numbers = updatedNumbers.take(6) // 6개 초과 시 제한
+                    numbers = updatedNumbers.take(6) // 6개 넘으면 제한
                     navController.popBackStack()
                 },
                 numbers = numbers
@@ -156,7 +162,6 @@ fun AddDeleteGridNavGraph() {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
