@@ -100,7 +100,7 @@ fun AddDeleteScreen() {
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             items(numbers.size) { index ->
-                NumberCircle(number=numbers[index])
+                NumberCircle(number = numbers[index])
             }
         }
 
@@ -120,15 +120,15 @@ fun AddDeleteScreen() {
 
             AddButton {
                 if (numbers.size < 6) {
-                    numbers.add(numbers.size+1)
+                    numbers.add(numbers.size + 1)
                 }
             }
         }
     }
 }
 
-@Preview (showBackground = true,  )
+@Preview(showBackground = true)
 @Composable
-private fun AddDeleteScreenPreview () {
+private fun AddDeleteScreenPreview() {
     AddDeleteScreen()
 }

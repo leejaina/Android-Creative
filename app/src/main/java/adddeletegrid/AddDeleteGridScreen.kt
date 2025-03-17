@@ -26,8 +26,11 @@ import androidx.compose.foundation.layout.FlowRow
 fun MoveButton(onClick: () -> Unit = {}) {
     Button(
         onClick = onClick,
-        modifier = Modifier.size(width = 100.dp, height = 40.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA938))
+        modifier = Modifier
+            .size(width = 100.dp, height = 40.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFFFA938)
+        )
     ) {
         Text("이동", color = Color.Black)
     }
@@ -112,25 +115,19 @@ fun AddDeleteGridScreen(onMoveClick: (List<Int>) -> Unit, numbers: List<Int>) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 40.dp),
+                .padding(horizontal = 60.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(
-                onClick = {
-                    if (numbersState.size > 1) numbersState = numbersState.dropLast(1)
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEADDFF))
-            ) {
-                Text("삭제", color = Color.Black)
+            RemoveButton {
+                if (numbersState.size > 1) {
+                    numbersState = numbersState.dropLast(1)
+                }
             }
 
-            Button(
-                onClick = {
-                    if (numbersState.size < 15) numbersState = numbersState + (numbersState.size + 1)
-                },
-                colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF66558F))
-            ) {
-                Text("추가", color = Color.White)
+            AddButton {
+                if (numbersState.size < 6) {
+                    numbersState = numbersState + (numbersState.size + 1)
+                }
             }
         }
     }
